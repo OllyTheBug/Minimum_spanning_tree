@@ -1,6 +1,14 @@
 import matplotlib.pyplot as plt
 from math import inf
 from random import randint
+# pygame imports
+import pygame
+from pygame.locals import *
+
+#constants
+maze_len=10
+screen_len=900
+
 
 class Maze():
     def __init__(self, size):
@@ -8,6 +16,7 @@ class Maze():
         self.adjacency_matrix = [[-1 for x in range(size**2)] for y in range(size**2)]
         self.vertc = size * size
         self.connect_adjacent_nodes_in_grid()
+        self.p = self.MST_by_prims()
     def connect_adjacent_nodes_in_grid(self):
         for vertex in range(self.vertc):
             x = vertex % self.size
@@ -20,7 +29,7 @@ class Maze():
                 self.adjacency_matrix[vertex][vertex - self.size] = randint(1, 50)
             if y < self.size - 1:
                 self.adjacency_matrix[vertex][vertex + self.size] = randint(1, 50)
-    def plot(self, P):
+    def plot_mst(self, P):
         # draw grid of points
         x = [i % self.size for i in range(self.vertc)]
         y = [i // self.size for i in range(self.vertc)]
@@ -32,6 +41,21 @@ class Maze():
                 plt.plot([i % self.size, P[i] % self.size], [i // self.size, P[i] // self.size], color='r')
             
         plt.show()
+        
+    def plot_mst_animated(self, P, direct):
+        x = [i % self.size for i in range(self.vertc)]
+        y = [i // self.size for i in range(self.vertc)]
+        plt.scatter(x, y, s=15)
+        for i in range(len(P)):
+            if P[i] is not None:
+                plt.plot([i % self.size, P[i] % self.size], [i // self.size, P[i] // self.size], color='r')
+                # write direction direct[i] at point
+                #plt.text((i % self.size) + 0.5, (i // self.size) + 0.5, direct[i], fontsize=10)
+                    
+                plt.pause(1)
+        plt.show()
+        
+            
     def MST_by_prims(self):
         # each node is a vertex, and has ID (size*y + x)
         visited = set()
@@ -74,12 +98,15 @@ class Maze():
         # return the path
         return P
 
+# pygame setup
+pygame.init()
+screen = pygame.display.set_mode((screen_len, screen_len))
+pygame.display.set_caption('Maze')
+clock = pygame.time.Clock()
 
 
-maze = Maze(10)
+maze = Maze(maze_len)
+p = maze.p
 
-mat = maze.adjacency_matrix
-#
-p = maze.MST_by_prims()
-maze.plot(p)
+
 pass
