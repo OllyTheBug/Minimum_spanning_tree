@@ -154,27 +154,55 @@ class Maze():
         # return the path
         return P
 maze = Maze(maze_len)
-print(maze.directions)
-maze.plot_by_directions()
+directions=maze.directions
+#maze.plot_by_directions()
 
 
 pass
-# # pygame setup
-# pygame.init()
-# screen = pygame.display.set_mode((screen_len, screen_len))
-# pygame.display.set_caption('Maze')
-# clock = pygame.time.Clock()
+# pygame setup
+pygame.init()
+screen = pygame.display.set_mode((screen_len, screen_len))
 
-# running = True
-# while running:
-#     clock.tick(60)
-#     for event in pygame.event.get():
-#         if event.type == QUIT:
-#             running = False
-#     screen.fill((0, 0, 0))
+pygame.display.set_caption('Maze')
+clock = pygame.time.Clock()
+brick_size = screen_len // maze_len
+
+
+screen.fill((0, 0, 0))
+step = 0
+running = True
+while running:
+    clock.tick(2)
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            running = False
+    # surreptitiously skip over the none
+    if maze.P[step] is None:
+        current_pos=(0,0)
+        step +=1
+        continue
+    pos_cell_id = maze.P[step]
+    pos_cell_x = pos_cell_id % maze_len
+    pos_cell_y = pos_cell_id // maze_len
+    current_pos = (pos_cell_x, pos_cell_y)
+    
+    if directions[step] == 'n':
+        current_pos = [0,0]
+    elif directions[step] == 'D':
+        current_pos = [current_pos[0], current_pos[1] + 1]
+    elif directions[step] == 'R':
+        current_pos = [current_pos[0] + 1, current_pos[1]]
+    elif directions[step] == 'U':
+        current_pos = [current_pos[0], current_pos[1] - 1]
+    elif directions[step] == 'L':
+        current_pos = [current_pos[0] - 1, current_pos[1]]
+    #draw white square at current position
+    pygame.draw.rect(screen, (255, 255, 255), (current_pos[0] * brick_size, current_pos[1] * brick_size, brick_size, brick_size))
+    step += 1
+    
 
     
-#     pygame.display.flip()
+    pygame.display.flip()
 
 
 
