@@ -18,12 +18,16 @@ class Path():
         for vertex in range(self.vertc):
             x = vertex % self.size
             y = vertex // self.size
+            # connect to left if not on left edge
             if x > 0:
                 self.adjacency_matrix[vertex][vertex - 1] = randint(1, 50)
+            # connect to right if not on right edge
             if x < self.size - 1:
                 self.adjacency_matrix[vertex][vertex + 1] = randint(1, 50)
+            # connect to top if not on top edge
             if y > 0:
                 self.adjacency_matrix[vertex][vertex - self.size] = randint(1, 50)
+            # connect to bottom if not on bottom edge
             if y < self.size - 1:
                 self.adjacency_matrix[vertex][vertex + self.size] = randint(1, 50)
     def plot_mst(self):
