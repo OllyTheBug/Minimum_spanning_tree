@@ -106,7 +106,8 @@ public class Path {
         if(y<size){
             this.addEdge(i, i+size, (int)(Math.random()*50));
         }
-
+        
+    }
     private void MST_by_prims(){
         // create priority queue to store nodeCount nodes
         PriorityQueue<Node> pq = new PriorityQueue<Node>(new CompareNodes());
@@ -145,7 +146,6 @@ public class Path {
 
 
         }
-    }
     //getter for nodes
     public Node[] getNodes(){
         return nodes;
