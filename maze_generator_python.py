@@ -1,16 +1,12 @@
 import matplotlib.pyplot as plt
 from math import inf
 from random import randint
-# pygame imports
-import pygame
-from pygame.locals import *
+
 
 #constants
 maze_len=10
-screen_len=900
 
-
-class Maze():
+class Path():
     def __init__(self, size):
         self.size = size
         self.adjacency_matrix = [[-1 for x in range(size**2)] for y in range(size**2)]
@@ -153,58 +149,5 @@ class Maze():
                         P[v] = u
         # return the path
         return P
-maze = Maze(maze_len)
-directions=maze.directions
-#maze.plot_by_directions()
-
-
-pass
-# pygame setup
-pygame.init()
-screen = pygame.display.set_mode((screen_len, screen_len))
-
-pygame.display.set_caption('Maze')
-clock = pygame.time.Clock()
-brick_size = screen_len // maze_len
-
-
-screen.fill((0, 0, 0))
-step = 0
-running = True
-while running:
-    clock.tick(2)
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            running = False
-    # surreptitiously skip over the none
-    if maze.P[step] is None:
-        current_pos=(0,0)
-        step +=1
-        continue
-    pos_cell_id = maze.P[step]
-    pos_cell_x = pos_cell_id % maze_len
-    pos_cell_y = pos_cell_id // maze_len
-    current_pos = (pos_cell_x, pos_cell_y)
-    
-    if directions[step] == 'n':
-        current_pos = [0,0]
-    elif directions[step] == 'D':
-        current_pos = [current_pos[0], current_pos[1] + 1]
-    elif directions[step] == 'R':
-        current_pos = [current_pos[0] + 1, current_pos[1]]
-    elif directions[step] == 'U':
-        current_pos = [current_pos[0], current_pos[1] - 1]
-    elif directions[step] == 'L':
-        current_pos = [current_pos[0] - 1, current_pos[1]]
-    #draw white square at current position
-    pygame.draw.rect(screen, (255, 255, 255), (current_pos[0] * brick_size, current_pos[1] * brick_size, brick_size, brick_size))
-    step += 1
-    
-
-    
-    pygame.display.flip()
-
-
-
-
-pass
+maze = Path(maze_len)
+maze.plot_mst()
