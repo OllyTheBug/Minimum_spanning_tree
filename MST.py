@@ -14,22 +14,27 @@ class Path():
         self.connect_adjacent_nodes_in_grid()
         self.P = self.MST_by_prims()
         self.directions = self.parent_array_to_directions()
+        
+    def add_edge(self, v1, v2, weight):
+        self.adjacency_matrix[v1][v2] = weight
+        self.adjacency_matrix[v2][v1] = weight
+    
     def connect_adjacent_nodes_in_grid(self):
         for vertex in range(self.vertc):
             x = vertex % self.size
             y = vertex // self.size
             # connect to left if not on left edge
             if x > 0:
-                self.adjacency_matrix[vertex][vertex - 1] = randint(1, 50)
+                self.add_edge(vertex, vertex-1, randint(1,50))
             # connect to right if not on right edge
             if x < self.size - 1:
-                self.adjacency_matrix[vertex][vertex + 1] = randint(1, 50)
+                self.add_edge(vertex, vertex+1, randint(1,50))
             # connect to top if not on top edge
             if y > 0:
-                self.adjacency_matrix[vertex][vertex - self.size] = randint(1, 50)
+                self.add_edge(vertex, vertex-self.size, randint(1,50))
             # connect to bottom if not on bottom edge
             if y < self.size - 1:
-                self.adjacency_matrix[vertex][vertex + self.size] = randint(1, 50)
+                self.add_edge(vertex, vertex+self.size, randint(1,50))
     def plot_mst(self):
         # draw grid of points
         x = [i % self.size for i in range(self.vertc)]
