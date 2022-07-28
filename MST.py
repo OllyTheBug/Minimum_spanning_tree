@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from math import inf
 from random import randint
-
+import argparse
 
 #constants
 maze_len=10
@@ -149,5 +149,18 @@ class Path():
                         P[v] = u
         # return the path
         return P
-maze = Path(maze_len)
-maze.plot_mst()
+
+
+
+
+# Main
+if __name__ == '__main__':
+    # Parse arguments
+    parser = argparse.ArgumentParser(description='Generates a random grid-spanning tree.')
+    # get the size of the maze
+    parser.add_argument('-s', '--size', type=int, default=10, help='Size of the maze.')
+    args = parser.parse_args()
+    #maze length
+    size = args.size
+    maze = Path(size)
+    maze.plot_mst()
