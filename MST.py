@@ -172,4 +172,6 @@ if __name__ == '__main__':
     #maze length
     size = args.size
     maze = Path(size)
-    maze.plot_mst()
+    adjacency_table = Table(maze.adjacency_matrix)
+    adjacency_table.draw()
+    #maze.plot_mst()
