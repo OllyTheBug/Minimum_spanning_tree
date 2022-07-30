@@ -4,7 +4,7 @@ public static void main(String[] args){
     int size;
     //check whether arguments were passed in
     if(args.length == 0){
-        size = 3;
+        size = 10;
     }
     else{
         size = Integer.parseInt(args[0]);
@@ -14,7 +14,7 @@ public static void main(String[] args){
     for(int i = 0; i < nodes.length; i++){
         System.out.println(nodes[i].getN() + " " + nodes[i].getParent());
     }
-    Plot plot = new Plot(size);
+    Plot plot = new Plot(size, nodes);
     plot.draw();
 }
 }

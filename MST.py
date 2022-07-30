@@ -87,7 +87,7 @@ class Path():
                 #plt.text((i % self.size) + 0.5, (i // self.size) + 0.5, direct[i], fontsize=10)
                 print(f'{self.P[i]} moves to {i}')
                     
-                plt.pause(1)
+                plt.pause(0.1)
         plt.show()
         
         
@@ -172,6 +172,5 @@ if __name__ == '__main__':
     #maze length
     size = args.size
     maze = Path(size)
-    adjacency_table = Table(maze.adjacency_matrix)
-    adjacency_table.draw()
+    maze.plot_mst_animated()
     #maze.plot_mst()
