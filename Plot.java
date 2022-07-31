@@ -36,8 +36,27 @@ public class Plot extends JPanel {
             int y = nodes[i].getY();
             int n = nodes[i].getN();
             int cost = nodes[i].getCost();
+            Node p = nodes[i].getParent();
+            Node[] neighbors = new Node[4];
+            // for each node neighbor, add nodes[i] to its neighbors array
+            for (int j = 0; j < 4; j++) {
+                if (nodes[i].getNeighbors()[j] != 0) {
+                    neighbors[j] = nodes[i].getNeighbors()[j];
+                }
+            }
+
+            
+            // draw node
             graph.setColor(Color.BLACK);
-            graph.fillOval(x * width / size  + (width/size/2), y * height / size + (height/size/2), 5, 5);
+            graph.fillOval(x * width / size + (width / size / 2), y * height / size + (height / size / 2), 5, 5);
+            // print n and p.n to console
+
+            // draw a line from parent to node
+            // plotParent(graph, width, height, x, y, n, p);
+
+            // draw a line from node to neighbor
+            plotNeighbors(graph, width, height, x, y, n, neighbors);
+
         }
 
         // // draw evenly spaced points on the grid
@@ -53,6 +72,26 @@ public class Plot extends JPanel {
         // }
         // }
 
+    }
+
+    private void plotParent(Graphics2D graph, int width, int height, int x, int y, int n, Node p) {
+        if (p != null) {
+            System.out.println(n + " " + p.getN());
+            graph.setColor(Color.RED);
+            graph.drawLine(x * width / size + (width / size / 2), y * height / size + (height / size / 2),
+                    p.getX() * width / size + (width / size / 2), p.getY() * height / size + (height / size / 2));
+        }
+    }
+
+    private void plotNeighbors(Graphics2D graph, int width, int height, int x, int y, int n, Node[] neighbors) {
+        if (neighbors != null) {
+            for (int i = 0; i < neighbors.length; i++) {
+                graph.setColor(Color.BLUE);
+                graph.drawLine(x * width / size + (width / size / 2), y * height / size + (height / size / 2),
+                        neighbors[i].getX() * width / size + (width / size / 2),
+                        neighbors[i].getY() * height / size + (height / size / 2));
+            }
+        }
     }
 
     // main() method start

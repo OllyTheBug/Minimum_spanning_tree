@@ -14,7 +14,9 @@ public class Path {
         this.nodes = new Node[nodeCount];
         for (int i = 0; i < nodeCount; i++) {
             this.nodes[i] = new Node(i, i % this.size, i / this.size, Integer.MAX_VALUE, null);
+            this.nodes[i].setNeighbors(getNodeNeighbors(this.nodes[i]));
         }
+        
         this.adjacencyMatrix = new int[size * size][size * size];
         // initialize adjacency matrix to -1
         for (int i = 0; i < size; i++) {
@@ -31,59 +33,78 @@ public class Path {
         adjacencyMatrix[i][j] = weight;
     }
 
-    private void connect_adjacent_nodes_in_grid() {
-        for (int node = 0; node < nodeCount; node++) {
-            int x = node % size;
-            int y = node / size;
+    private int getEdge(int u, int v){
+        return adjacencyMatrix[u][v];
+    }
 
-            if (x > 0) {
-                this.addEdge(node, node - 1, (int) (Math.random() * 50));
+    public int[] getNodeNeighbors(Node node) {
+        int x = node.getX();
+        int y = node.getY();
+        int[] neighbors = new int[4];
+        if (x > 0) {
+            neighbors[0] = node.getN() - 1;
+        }
+        if (x < size - 1) {
+            neighbors[1] = node.getN() + 1;
+        }
+        if (y > 0) {
+            neighbors[2] = node.getN() - size;
+        }
+        if (y < size - 1) {
+            neighbors[3] = node.getN() + size;
+        }
+        return neighbors;
+    }
+
+    private void connect_adjacent_nodes_in_grid() {
+        for (int noden = 0; noden < nodeCount; noden++) {
+            int x = noden % size;
+            int y = noden / size;
+
+            int[] neighbors = getNodeNeighbors(nodes[noden]);
+            for (int i = 0; i < 4; i++) {
+                if (neighbors[i] != 0) {
+                    // add edge between neighbors with random weight
+                    addEdge(noden, neighbors[i], (int) (Math.random() * 10));
+                }
             }
-            if (x < (size - 1)) {
-                this.addEdge(node, node + 1, (int) (Math.random() * 50));
-            }
-            if (y > 0) {
-                this.addEdge(node, node - size, (int) (Math.random() * 50));
-            }
-            if (y < (size - 1)) {
-                this.addEdge(node, node + size, (int) (Math.random() * 50));
-            }
+
         }
     }
 
     private void MST_by_prims() {
         // create priority queue to store nodeCount nodes
         PriorityQueue<Node> pq = new PriorityQueue<Node>(new CompareNodes());
-        // add nodes to pq
+        //add each node in this.nodes to the priority queue
+        //keys
+        int[] keys = new int[nodeCount];
+        
         for (int i = 0; i < nodeCount; i++) {
-            pq.add(nodes[i]);
+            pq.add(this.nodes[i]);
+            keys[i] = Integer.MAX_VALUE;
         }
-        // set the first node to have a cost of 0
-        pq.peek().setCost(0);
-        // while the queue is not empty
+        keys[0] = 0;
+        //While pq is not empty; while nodes are left
         while (!pq.isEmpty()) {
-            // get the node with the lowest cost
-            pq.peek().setVisited(true);
-            // pop the node with the lowest cost
+            //remove the node with the lowest cost from pq
             Node u = pq.poll();
-            // get neighbors of u
-            for (int i = 0; i < nodeCount; i++) {
-                // Todo: change to using arithmetic instead of for/if
-                if (adjacencyMatrix[u.getN()][i] != -1) {
-                    // if the neighbor is not visited
-                    if (!nodes[i].getVisited()) {
-                        // if the weight between u and the neighbor is less than the neighbor's known
-                        // cost
-                        if (adjacencyMatrix[u.getN()][i] < pq.peek().getCost()) {
-                            // set the neighbor's parent to u
-                            pq.peek().setParent(u);
-                            // set the neighbor's new cost
-                            pq.peek().setCost(adjacencyMatrix[u.getN()][i]);
-                        }
-                    }
-                }
+            //set the node's visited flag to true
+            u.setVisited(true);
+            int[] neighbors = u.getNeighbors();
+            //for each neighbor of u
+            for (int i = 0; i < 4; i++){
+                int u_v = getEdge(u.getN(), neighbors[i]);
+                //if edge is less than keys[v]
+                if (u_v < keys[neighbors[i]]) {
+                    //set keys[v] to edge
+                    keys[neighbors[i]] = u_v;
+                    //set the parent of v to u
+                    nodes[neighbors[i]].setParent(u);
 
+
+                }
             }
+
         }
 
     }

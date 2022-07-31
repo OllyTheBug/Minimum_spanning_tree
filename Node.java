@@ -21,6 +21,7 @@ public class Node{
     private int cost;
     private Node parent;
     private boolean visited;
+    private int[] neighbors;
 /* --------------------------------- Methods -------------------------------- */
     // Constructor
     public Node(int n, int x, int y, int cost, Node parent){
@@ -31,6 +32,7 @@ public class Node{
         this.parent = parent;
     }
     // Getters
+
     public int getN(){
         return n;
     }
@@ -49,6 +51,10 @@ public class Node{
     public boolean getVisited(){
         return visited;
     }
+    //get neighbors of node
+    public int[] getNeighbors(){
+        return neighbors;
+    }
     // Setters
     public void setCost(int cost){
         this.cost = cost;
@@ -58,6 +64,10 @@ public class Node{
     }
     public void setVisited(boolean visited){
         this.visited = visited;
+    }
+    public int[] setNeighbors(int[] neighbors){
+        this.neighbors = neighbors;
+        return neighbors;
     }
 
 }
